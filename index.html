@@ -1,0 +1,3017 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Můj pracovní den – Praha</title>
+
+<style>
+:root{
+  --bg:#0d1117;
+  --panel:#161b22;
+  --panel2:#1c222b;
+  --border:#30363d;
+  --text:#e6edf3;
+  --muted:#8b949e;
+  --accent:#58a6ff;
+  --green:#3fb950;
+  --red:#f85149;
+  --yellow:#d29922;
+  --orange:#db6d28;
+  --purple:#a371f7;
+}
+
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+button,
+input,
+select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  max-width:1200px;
+  margin:auto;
+  padding:16px;
+}
+
+/* HEADER */
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:16px;
+}
+
+.title h1{
+  margin:0;
+  font-size:24px;
+}
+
+.title small{
+  color:var(--muted);
+}
+
+.header-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+/* NAV */
+
+.nav{
+  display:flex;
+  gap:6px;
+  margin-bottom:16px;
+  overflow-x:auto;
+}
+
+.nav button{
+  background:var(--panel);
+  color:var(--muted);
+  border:1px solid var(--border);
+  border-radius:8px;
+  padding:10px 14px;
+  white-space:nowrap;
+}
+
+.nav button.active{
+  color:white;
+  background:#212936;
+  border-color:var(--accent);
+}
+
+/* PANELS */
+
+.panel{
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  margin-bottom:16px;
+}
+
+.panel-title{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:12px;
+}
+
+.panel-title h2,
+.panel-title h3{
+  margin:0;
+}
+
+.muted{
+  color:var(--muted);
+}
+
+/* BUTTONS */
+
+.btn{
+  border:1px solid var(--border);
+  background:var(--panel2);
+  color:var(--text);
+  border-radius:8px;
+  padding:8px 12px;
+}
+
+.btn:hover{
+  border-color:var(--accent);
+}
+
+.btn-primary{
+  background:#1f6feb;
+  border-color:#1f6feb;
+  color:white;
+}
+
+.btn-danger{
+  background:rgba(248,81,73,.12);
+  color:#ff7b72;
+  border-color:rgba(248,81,73,.4);
+}
+
+.btn-success{
+  background:rgba(63,185,80,.12);
+  color:#56d364;
+  border-color:rgba(63,185,80,.4);
+}
+
+.btn-small{
+  padding:6px 9px;
+  font-size:13px;
+}
+
+/* TODAY */
+
+.today-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.today-date{
+  font-size:22px;
+  font-weight:bold;
+}
+
+.kpis{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-top:14px;
+}
+
+.kpi{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px;
+}
+
+.kpi .value{
+  font-size:22px;
+  font-weight:bold;
+}
+
+.kpi .label{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px;
+}
+
+/* TICKET */
+
+.ticket-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.ticket{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:12px;
+}
+
+.ticket.cancelled{
+  opacity:.6;
+  border-color:rgba(248,81,73,.45);
+}
+
+.ticket-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.train-name{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.route{
+  margin-top:7px;
+  font-size:15px;
+}
+
+.time{
+  color:var(--muted);
+  margin-top:5px;
+}
+
+.ticket-meta{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:8px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.ticket-actions{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-top:12px;
+}
+
+.badge{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:bold;
+}
+
+.badge-done{
+  color:#56d364;
+  background:rgba(63,185,80,.13);
+}
+
+.badge-planned{
+  color:#58a6ff;
+  background:rgba(88,166,255,.13);
+}
+
+.badge-cancelled{
+  color:#ff7b72;
+  background:rgba(248,81,73,.13);
+}
+
+/* ADD TRAIN */
+
+.add-train-box{
+  margin-top:12px;
+  padding:12px;
+  background:#111820;
+  border:1px solid var(--border);
+  border-radius:10px;
+}
+
+.train-options{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  margin-top:10px;
+}
+
+.train-option{
+  text-align:left;
+  padding:12px;
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:9px;
+  color:var(--text);
+}
+
+.train-option:hover{
+  border-color:var(--accent);
+}
+
+.train-option strong{
+  display:block;
+  margin-bottom:4px;
+}
+
+.train-option span{
+  color:var(--muted);
+  font-size:12px;
+}
+
+/* TIMELINE */
+
+.timeline{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.timeline-item{
+  display:grid;
+  grid-template-columns:70px 1fr;
+  gap:10px;
+}
+
+.timeline-time{
+  color:var(--muted);
+  font-size:13px;
+  padding-top:8px;
+}
+
+.timeline-content{
+  border-left:2px solid var(--border);
+  padding:8px 12px;
+  background:var(--panel2);
+  border-radius:0 8px 8px 0;
+}
+
+/* WEEK */
+
+.week-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:7px;
+}
+
+.week-day{
+  min-height:150px;
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:9px;
+  cursor:pointer;
+}
+
+.week-day:hover{
+  border-color:var(--accent);
+}
+
+.week-day.today{
+  border-color:var(--accent);
+}
+
+.week-day-name{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.week-day-number{
+  font-size:20px;
+  font-weight:bold;
+  margin:3px 0 8px;
+}
+
+.mini-ticket{
+  font-size:12px;
+  padding:5px;
+  margin-top:4px;
+  border-radius:5px;
+  background:#202832;
+}
+
+.mini-ticket.cancelled{
+  color:#ff7b72;
+  text-decoration:line-through;
+}
+
+/* CALENDAR */
+
+.calendar-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+
+.calendar-header button{
+  background:var(--panel2);
+  color:white;
+  border:1px solid var(--border);
+  border-radius:7px;
+  padding:6px 10px;
+}
+
+.calendar-title{
+  font-size:19px;
+  font-weight:bold;
+}
+
+.calendar-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:4px;
+}
+
+.calendar-weekday{
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+  padding:6px 0;
+}
+
+.calendar-day{
+  min-height:105px;
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:7px;
+  padding:7px;
+  cursor:pointer;
+}
+
+.calendar-day:hover{
+  border-color:var(--accent);
+}
+
+.calendar-day.empty{
+  opacity:.25;
+  cursor:default;
+}
+
+.calendar-day.today{
+  border-color:var(--accent);
+}
+
+.calendar-number{
+  font-weight:bold;
+  margin-bottom:5px;
+}
+
+.calendar-ticket{
+  font-size:11px;
+  padding:4px;
+  margin-top:3px;
+  border-radius:5px;
+  background:#202832;
+  overflow:hidden;
+  white-space:nowrap;
+}
+
+.calendar-ticket.cancelled{
+  color:#ff7b72;
+  background:rgba(248,81,73,.08);
+  text-decoration:line-through;
+}
+
+.calendar-ticket.done{
+  border-left:3px solid var(--green);
+}
+
+.calendar-ticket.planned{
+  border-left:3px solid var(--accent);
+}
+
+/* STATS */
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.stat-card{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px;
+}
+
+.stat-card .big{
+  font-size:25px;
+  font-weight:bold;
+}
+
+.stat-card .small{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:4px;
+}
+
+.progress{
+  height:8px;
+  background:#30363d;
+  border-radius:99px;
+  overflow:hidden;
+  margin-top:10px;
+}
+
+.progress > div{
+  height:100%;
+  background:var(--green);
+}
+
+/* EXPENSE */
+
+.expense{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:9px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.expense:last-child{
+  border-bottom:0;
+}
+
+/* MODAL */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+  z-index:100;
+}
+
+.modal-backdrop.show{
+  display:flex;
+}
+
+.modal{
+  width:min(520px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:18px;
+}
+
+.modal h2{
+  margin-top:0;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.form-group{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.form-group.full{
+  grid-column:1/-1;
+}
+
+.form-group label{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.form-group input,
+.form-group select{
+  background:#0d1117;
+  color:white;
+  border:1px solid var(--border);
+  border-radius:7px;
+  padding:9px;
+}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:15px;
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+  .kpis{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .train-options{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .stats-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .week-grid{
+    grid-template-columns:1fr;
+  }
+
+  .week-day{
+    min-height:auto;
+  }
+}
+
+@media(max-width:500px){
+  .app{
+    padding:10px;
+  }
+
+  header{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .kpis,
+  .stats-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-group.full{
+    grid-column:auto;
+  }
+
+  .calendar-day{
+    min-height:75px;
+    padding:4px;
+  }
+
+  .calendar-ticket{
+    font-size:9px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+  <div class="title">
+    <h1>🚆 Můj pracovní den</h1>
+    <small>Praha · jízdenky · MHD · statistiky</small>
+  </div>
+
+  <div class="header-actions">
+    <button class="btn" onclick="exportData()">⬇ Export</button>
+    <button class="btn" onclick="document.getElementById('importFile').click()">⬆ Import</button>
+    <input
+      id="importFile"
+      type="file"
+      accept=".json"
+      style="display:none"
+      onchange="importData(event)"
+    >
+  </div>
+</header>
+
+<nav class="nav">
+  <button id="nav-today" onclick="setView('today')">Dnes</button>
+  <button id="nav-week" onclick="setView('week')">Týden</button>
+  <button id="nav-month" onclick="setView('month')">Měsíc</button>
+  <button id="nav-stats" onclick="setView('stats')">Statistiky</button>
+</nav>
+
+<main id="app"></main>
+
+</div>
+
+<!-- MODAL: VLAK -->
+
+<div id="ticketModal" class="modal-backdrop">
+
+  <div class="modal">
+
+    <h2 id="ticketModalTitle">Přidat vlak</h2>
+
+    <form id="ticketForm" onsubmit="saveTicketFromForm(event)">
+
+      <input type="hidden" id="editTicketId">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Datum</label>
+          <input id="ticketDate" type="date" required>
+        </div>
+
+        <div class="form-group">
+          <label>Stav</label>
+          <select id="ticketStatus">
+            <option value="planned">Plán</option>
+            <option value="done">Uskutečněno</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Vlak</label>
+          <input id="ticketTrain" required>
+        </div>
+
+        <div class="form-group">
+          <label>Směr</label>
+          <select id="ticketDirection">
+            <option value="outbound">Bohumín → Praha</option>
+            <option value="return">Praha → Bohumín</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Odkud</label>
+          <input id="ticketFrom" required>
+        </div>
+
+        <div class="form-group">
+          <label>Kam</label>
+          <input id="ticketTo" required>
+        </div>
+
+        <div class="form-group">
+          <label>Odjezd</label>
+          <input id="ticketDep" type="time" required>
+        </div>
+
+        <div class="form-group">
+          <label>Příjezd</label>
+          <input id="ticketArr" type="time" required>
+        </div>
+
+        <div class="form-group">
+          <label>Vůz</label>
+          <input id="ticketCar">
+        </div>
+
+        <div class="form-group">
+          <label>Místo</label>
+          <input id="ticketSeat">
+        </div>
+
+        <div class="form-group">
+          <label>Cena pro statistiku</label>
+          <input id="ticketPrice" type="number" min="0" step="1">
+        </div>
+
+        <div class="form-group">
+          <label>Doklad / číslo jízdenky</label>
+          <input id="ticketDocument">
+        </div>
+
+        <div class="form-group full">
+          <label>
+            <input id="ticketQuiet" type="checkbox">
+            Tichý oddíl
+          </label>
+        </div>
+
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeTicketModal()">
+          Zrušit
+        </button>
+
+        <button type="submit" class="btn btn-primary">
+          Uložit vlak
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- MODAL: VÝDAJ -->
+
+<div id="expenseModal" class="modal-backdrop">
+
+  <div class="modal">
+
+    <h2>Nový výdaj</h2>
+
+    <form onsubmit="saveExpenseFromForm(event)">
+
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label>Datum</label>
+          <input id="expenseDate" type="date" required>
+        </div>
+
+        <div class="form-group">
+          <label>Částka</label>
+          <input id="expenseAmount" type="number" min="0" required>
+        </div>
+
+        <div class="form-group full">
+          <label>Popis</label>
+          <input id="expenseDescription" placeholder="Např. taxi, oběd...">
+        </div>
+
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn" onclick="closeExpenseModal()">
+          Zrušit
+        </button>
+
+        <button type="submit" class="btn btn-primary">
+          Uložit
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<script>
+
+/* =========================================================
+   KONFIGURACE
+========================================================= */
+
+const STORAGE_KEY = "muj_pracovni_den_v3";
+
+const PRICE_EN = 600;
+const PRICE_PENDOLINO_MORNING = 560;
+const PRICE_RETURN = 600;
+const TAXI_MORNING = 120;
+
+/* =========================================================
+   POMOCNÉ FUNKCE
+========================================================= */
+
+function todayKey(){
+
+  const d = new Date();
+
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const day = String(d.getDate()).padStart(2,"0");
+
+  return `${y}-${m}-${day}`;
+}
+
+function dateObj(key){
+  return new Date(key + "T12:00:00");
+}
+
+function fmtDate(key){
+
+  return dateObj(key).toLocaleDateString("cs-CZ",{
+    weekday:"long",
+    day:"numeric",
+    month:"long",
+    year:"numeric"
+  });
+}
+
+function fmtShortDate(key){
+
+  return dateObj(key).toLocaleDateString("cs-CZ",{
+    day:"numeric",
+    month:"numeric"
+  });
+}
+
+function money(value){
+
+  return new Intl.NumberFormat("cs-CZ").format(
+    Math.round(value || 0)
+  ) + " Kč";
+}
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function uid(prefix="id"){
+
+  return prefix + "-" +
+    Date.now().toString(36) +
+    "-" +
+    Math.random().toString(36).slice(2,8);
+}
+
+function daysInMonth(year,month){
+
+  return new Date(year,month+1,0).getDate();
+}
+
+function pad(n){
+  return String(n).padStart(2,"0");
+}
+
+function keyFromDate(year,month,day){
+
+  return `${year}-${pad(month+1)}-${pad(day)}`;
+}
+
+/* =========================================================
+   DATA
+========================================================= */
+
+let TICKETS = [
+
+  /*
+    DEMO DATA
+
+    Cena je zde pouze kvůli statistikám.
+    V detailu vlaku se cena NEZOBRAZUJE.
+  */
+
+  {
+    id:"demo-1",
+    date:"2026-09-22",
+    status:"done",
+    source:"gmail",
+    direction:"outbound",
+    price:600,
+    train:"SC 516",
+    from:"Bohumín",
+    to:"Praha hl.n.",
+    dep:"04:58",
+    arr:"08:25",
+    car:"3",
+    seat:"42",
+    document:"",
+    quiet:false
+  },
+
+  {
+    id:"demo-2",
+    date:"2026-09-22",
+    status:"planned",
+    source:"gmail",
+    direction:"return",
+    price:600,
+    train:"IC 547",
+    from:"Praha hl.n.",
+    to:"Bohumín",
+    dep:"16:00",
+    arr:"19:30",
+    car:"2",
+    seat:"18",
+    document:"",
+    quiet:false
+  }
+
+];
+
+/*
+  Manuální storna se NEZAPISUJÍ přímo do TICKETS.
+
+  Tady se uchová pouze:
+  ticket ID → cancelled
+*/
+let TICKET_STATUS_OVERRIDES = {};
+
+/* Samostatné výdaje */
+
+let EXPENSES = [];
+
+/* Lítačka */
+
+let LITACKA_PAYMENTS = [];
+
+/* Karviná MHD */
+
+let KARVINA_PAYMENTS = [];
+
+/* NHL – připraveno pro další data */
+
+let NHL_GAMES = [];
+
+/* =========================================================
+   LOCAL STORAGE
+========================================================= */
+
+function loadStoredData(){
+
+  try{
+
+    const raw = localStorage.getItem(STORAGE_KEY);
+
+    if(!raw) return;
+
+    const data = JSON.parse(raw);
+
+    if(Array.isArray(data.tickets)){
+      TICKETS = data.tickets;
+    }
+
+    if(data.ticketStatusOverrides){
+      TICKET_STATUS_OVERRIDES =
+        data.ticketStatusOverrides;
+    }
+
+    if(Array.isArray(data.expenses)){
+      EXPENSES = data.expenses;
+    }
+
+    if(Array.isArray(data.litackaPayments)){
+      LITACKA_PAYMENTS =
+        data.litackaPayments;
+    }
+
+    if(Array.isArray(data.karvinaPayments)){
+      KARVINA_PAYMENTS =
+        data.karvinaPayments;
+    }
+
+    if(Array.isArray(data.nhlGames)){
+      NHL_GAMES = data.nhlGames;
+    }
+
+  }catch(error){
+
+    console.error("Chyba načítání dat:",error);
+
+  }
+
+}
+
+function saveStoredData(){
+
+  localStorage.setItem(
+    STORAGE_KEY,
+    JSON.stringify({
+
+      tickets:TICKETS,
+
+      ticketStatusOverrides:
+        TICKET_STATUS_OVERRIDES,
+
+      expenses:EXPENSES,
+
+      litackaPayments:
+        LITACKA_PAYMENTS,
+
+      karvinaPayments:
+        KARVINA_PAYMENTS,
+
+      nhlGames:NHL_GAMES
+
+    })
+  );
+
+}
+
+/* =========================================================
+   STAV VLAKU
+========================================================= */
+
+function getTicketStatus(ticket){
+
+  if(
+    TICKET_STATUS_OVERRIDES[
+      ticket.id
+    ]
+  ){
+
+    return TICKET_STATUS_OVERRIDES[
+      ticket.id
+    ];
+
+  }
+
+  return ticket.status || "planned";
+
+}
+
+function isTicketCancelled(ticket){
+
+  return getTicketStatus(ticket) === "cancelled";
+
+}
+
+function isTicketValid(ticket){
+
+  return !isTicketCancelled(ticket);
+
+}
+
+function setTicketStatus(ticketId,status){
+
+  TICKET_STATUS_OVERRIDES[
+    ticketId
+  ] = status;
+
+  saveStoredData();
+
+  renderAll();
+
+}
+
+/* =========================================================
+   STORNO
+========================================================= */
+
+function cancelTicket(ticketId){
+
+  const ticket =
+    TICKETS.find(t => t.id === ticketId);
+
+  if(!ticket) return;
+
+  const confirmed = confirm(
+
+    `Opravdu chceš zrušit jízdenku ${ticket.train}?\n\n` +
+
+    `${ticket.date} · ` +
+    `${ticket.dep || ""} · ` +
+    `${ticket.from || ""} → ${ticket.to || ""}`
+
+  );
+
+  if(!confirmed) return;
+
+  setTicketStatus(
+    ticketId,
+    "cancelled"
+  );
+
+  setTimeout(
+    () => openDayDetail(ticket.date),
+    50
+  );
+
+}
+
+function restoreTicket(ticketId){
+
+  const ticket =
+    TICKETS.find(t => t.id === ticketId);
+
+  if(!ticket) return;
+
+  const confirmed = confirm(
+    `Obnovit jízdenku ${ticket.train}?`
+  );
+
+  if(!confirmed) return;
+
+  delete TICKET_STATUS_OVERRIDES[
+    ticketId
+  ];
+
+  saveStoredData();
+
+  renderAll();
+
+  setTimeout(
+    () => openDayDetail(ticket.date),
+    50
+  );
+
+}
+
+/* =========================================================
+   TICKETY PODLE DATA
+========================================================= */
+
+function ticketsForDate(dateKey){
+
+  return TICKETS
+    .filter(t => t.date === dateKey)
+    .sort((a,b) =>
+      (a.dep || "").localeCompare(b.dep || "")
+    );
+
+}
+
+function validTicketsForDate(dateKey){
+
+  return ticketsForDate(dateKey)
+    .filter(isTicketValid);
+
+}
+
+/* =========================================================
+   STATISTIKY VLAKŮ
+========================================================= */
+
+function trainCostForDate(dateKey){
+
+  return validTicketsForDate(dateKey)
+    .reduce(
+      (sum,t) =>
+        sum + Number(t.price || 0),
+      0
+    );
+
+}
+
+function expenseCostForDate(dateKey){
+
+  return EXPENSES
+    .filter(e => e.date === dateKey)
+    .reduce(
+      (sum,e) =>
+        sum + Number(e.amount || 0),
+      0
+    );
+
+}
+
+function totalCostForDate(dateKey){
+
+  return (
+    trainCostForDate(dateKey) +
+    expenseCostForDate(dateKey)
+  );
+
+}
+
+function isOfficeDay(dateKey){
+
+  return validTicketsForDate(dateKey).length > 0;
+
+}
+
+/* =========================================================
+   VIEW
+========================================================= */
+
+let currentView = "today";
+let selectedDate = todayKey();
+
+let calendarDate = new Date();
+
+function setView(view){
+
+  currentView = view;
+
+  document
+    .querySelectorAll(".nav button")
+    .forEach(btn =>
+      btn.classList.remove("active")
+    );
+
+  const nav =
+    document.getElementById(
+      "nav-" + view
+    );
+
+  if(nav) nav.classList.add("active");
+
+  renderAll();
+
+}
+
+function renderAll(){
+
+  const root =
+    document.getElementById("app");
+
+  if(currentView === "today"){
+    root.innerHTML = renderToday();
+  }
+
+  if(currentView === "week"){
+    root.innerHTML = renderWeek();
+  }
+
+  if(currentView === "month"){
+    root.innerHTML = renderMonth();
+  }
+
+  if(currentView === "stats"){
+    root.innerHTML = renderStats();
+  }
+
+}
+
+/* =========================================================
+   DETAIL DNE
+========================================================= */
+
+function openDayDetail(dateKey){
+
+  selectedDate = dateKey;
+
+  currentView = "today";
+
+  setView("today");
+
+}
+
+/* =========================================================
+   PŘIDÁNÍ VLAKU
+========================================================= */
+
+function showAddTrainOptions(){
+
+  const box =
+    document.getElementById(
+      "addTrainOptions"
+    );
+
+  if(!box) return;
+
+  box.style.display =
+    box.style.display === "none"
+      ? "block"
+      : "none";
+
+}
+
+function addPresetTrain(preset){
+
+  const presets = {
+
+    morningEN:{
+      train:"EN",
+      direction:"outbound",
+      from:"Bohumín",
+      to:"Praha hl.n.",
+      dep:"05:00",
+      arr:"08:30",
+      car:"",
+      seat:"",
+      price:PRICE_EN
+    },
+
+    morningPendolino:{
+      train:"SC",
+      direction:"outbound",
+      from:"Bohumín",
+      to:"Praha hl.n.",
+      dep:"04:58",
+      arr:"08:25",
+      car:"",
+      seat:"",
+      price:PRICE_PENDOLINO_MORNING
+    },
+
+    afternoonEx:{
+      train:"Ex",
+      direction:"return",
+      from:"Praha hl.n.",
+      to:"Bohumín",
+      dep:"16:00",
+      arr:"19:30",
+      car:"",
+      seat:"",
+      price:PRICE_RETURN
+    },
+
+    eveningPendolino:{
+      train:"SC",
+      direction:"return",
+      from:"Praha hl.n.",
+      to:"Bohumín",
+      dep:"18:00",
+      arr:"21:25",
+      car:"",
+      seat:"",
+      price:PRICE_RETURN
+    }
+
+  };
+
+  const p = presets[preset];
+
+  if(!p) return;
+
+  openTicketModal({
+
+    mode:"add",
+
+    date:selectedDate,
+
+    status:"planned",
+
+    source:"manual",
+
+    direction:p.direction,
+
+    price:p.price,
+
+    train:p.train,
+
+    from:p.from,
+
+    to:p.to,
+
+    dep:p.dep,
+
+    arr:p.arr,
+
+    car:p.car,
+
+    seat:p.seat,
+
+    document:"",
+
+    quiet:false
+
+  });
+
+}
+
+/* =========================================================
+   MODAL VLAK
+========================================================= */
+
+function openTicketModal(ticket = null){
+
+  const modal =
+    document.getElementById(
+      "ticketModal"
+    );
+
+  document
+    .getElementById("ticketForm")
+    .reset();
+
+  if(ticket){
+
+    document.getElementById(
+      "ticketModalTitle"
+    ).textContent =
+      ticket.mode === "add"
+        ? "Přidat vlak"
+        : "Upravit vlak";
+
+    document.getElementById(
+      "editTicketId"
+    ).value =
+      ticket.mode === "add"
+        ? ""
+        : ticket.id || "";
+
+    document.getElementById(
+      "ticketDate"
+    ).value =
+      ticket.date || selectedDate;
+
+    document.getElementById(
+      "ticketStatus"
+    ).value =
+      ticket.status || "planned";
+
+    document.getElementById(
+      "ticketTrain"
+    ).value =
+      ticket.train || "";
+
+    document.getElementById(
+      "ticketDirection"
+    ).value =
+      ticket.direction || "outbound";
+
+    document.getElementById(
+      "ticketFrom"
+    ).value =
+      ticket.from || "";
+
+    document.getElementById(
+      "ticketTo"
+    ).value =
+      ticket.to || "";
+
+    document.getElementById(
+      "ticketDep"
+    ).value =
+      ticket.dep || "";
+
+    document.getElementById(
+      "ticketArr"
+    ).value =
+      ticket.arr || "";
+
+    document.getElementById(
+      "ticketCar"
+    ).value =
+      ticket.car || "";
+
+    document.getElementById(
+      "ticketSeat"
+    ).value =
+      ticket.seat || "";
+
+    document.getElementById(
+      "ticketPrice"
+    ).value =
+      ticket.price ?? "";
+
+    document.getElementById(
+      "ticketDocument"
+    ).value =
+      ticket.document || "";
+
+    document.getElementById(
+      "ticketQuiet"
+    ).checked =
+      !!ticket.quiet;
+
+  }
+
+  modal.classList.add("show");
+
+}
+
+function closeTicketModal(){
+
+  document
+    .getElementById("ticketModal")
+    .classList.remove("show");
+
+}
+
+function saveTicketFromForm(event){
+
+  event.preventDefault();
+
+  const id =
+    document.getElementById(
+      "editTicketId"
+    ).value;
+
+  const data = {
+
+    date:
+      document.getElementById(
+        "ticketDate"
+      ).value,
+
+    status:
+      document.getElementById(
+        "ticketStatus"
+      ).value,
+
+    train:
+      document.getElementById(
+        "ticketTrain"
+      ).value.trim(),
+
+    direction:
+      document.getElementById(
+        "ticketDirection"
+      ).value,
+
+    from:
+      document.getElementById(
+        "ticketFrom"
+      ).value.trim(),
+
+    to:
+      document.getElementById(
+        "ticketTo"
+      ).value.trim(),
+
+    dep:
+      document.getElementById(
+        "ticketDep"
+      ).value,
+
+    arr:
+      document.getElementById(
+        "ticketArr"
+      ).value,
+
+    car:
+      document.getElementById(
+        "ticketCar"
+      ).value.trim(),
+
+    seat:
+      document.getElementById(
+        "ticketSeat"
+      ).value.trim(),
+
+    price:
+      Number(
+        document.getElementById(
+          "ticketPrice"
+        ).value || 0
+      ),
+
+    document:
+      document.getElementById(
+        "ticketDocument"
+      ).value.trim(),
+
+    quiet:
+      document.getElementById(
+        "ticketQuiet"
+      ).checked
+
+  };
+
+  if(id){
+
+    const index =
+      TICKETS.findIndex(
+        t => t.id === id
+      );
+
+    if(index !== -1){
+
+      /*
+        Zachováme původní source.
+        Gmail vlak zůstane gmail,
+        ručně přidaný zůstane manual.
+      */
+
+      TICKETS[index] = {
+
+        ...TICKETS[index],
+
+        ...data
+
+      };
+
+    }
+
+  }else{
+
+    TICKETS.push({
+
+      id:uid("ticket"),
+
+      ...data,
+
+      source:"manual"
+
+    });
+
+  }
+
+  saveStoredData();
+
+  closeTicketModal();
+
+  renderAll();
+
+  setTimeout(
+    () => openDayDetail(data.date),
+    50
+  );
+
+}
+
+/* =========================================================
+   RENDER: TICKET
+========================================================= */
+
+function renderTicket(ticket){
+
+  const cancelled =
+    isTicketCancelled(ticket);
+
+  const status =
+    getTicketStatus(ticket);
+
+  let statusHtml = "";
+
+  if(cancelled){
+
+    statusHtml =
+      `<span class="badge badge-cancelled">
+        STORNOVÁNO
+      </span>`;
+
+  }else if(status === "done"){
+
+    statusHtml =
+      `<span class="badge badge-done">
+        USKUTEČNĚNO
+      </span>`;
+
+  }else{
+
+    statusHtml =
+      `<span class="badge badge-planned">
+        PLÁN
+      </span>`;
+
+  }
+
+  return `
+
+    <div class="ticket ${cancelled ? "cancelled" : ""}">
+
+      <div class="ticket-head">
+
+        <div>
+
+          <div class="train-name">
+            ${escapeHtml(ticket.train)}
+          </div>
+
+          <div class="route">
+            ${escapeHtml(ticket.from)}
+            →
+            ${escapeHtml(ticket.to)}
+          </div>
+
+          <div class="time">
+            ${escapeHtml(ticket.dep)}
+            →
+            ${escapeHtml(ticket.arr)}
+          </div>
+
+        </div>
+
+        <div>
+          ${statusHtml}
+        </div>
+
+      </div>
+
+      <div class="ticket-meta">
+
+        ${
+          ticket.car
+            ? `Vůz ${escapeHtml(ticket.car)}`
+            : ""
+        }
+
+        ${
+          ticket.seat
+            ? `· místo ${escapeHtml(ticket.seat)}`
+            : ""
+        }
+
+        ${
+          ticket.quiet
+            ? `· 🔇 tichý oddíl`
+            : ""
+        }
+
+        ${
+          ticket.source === "manual"
+            ? `· ručně`
+            : ""
+        }
+
+      </div>
+
+      <div class="ticket-actions">
+
+        ${
+          cancelled
+
+          ? `
+            <button
+              class="btn btn-success btn-small"
+              onclick="restoreTicket('${ticket.id}')"
+            >
+              ↩ Obnovit jízdenku
+            </button>
+          `
+
+          : `
+            <button
+              class="btn btn-small"
+              onclick="editTicket('${ticket.id}')"
+            >
+              ✏️ Upravit
+            </button>
+
+            <button
+              class="btn btn-danger btn-small"
+              onclick="cancelTicket('${ticket.id}')"
+            >
+              🚫 Zrušit jízdenku
+            </button>
+          `
+        }
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+/* =========================================================
+   ÚPRAVA VLAKU
+========================================================= */
+
+function editTicket(ticketId){
+
+  const ticket =
+    TICKETS.find(
+      t => t.id === ticketId
+    );
+
+  if(!ticket) return;
+
+  openTicketModal(ticket);
+
+}
+
+/* =========================================================
+   DETAIL DNE
+========================================================= */
+
+function renderDayDetail(dateKey){
+
+  const tickets =
+    ticketsForDate(dateKey);
+
+  const expenses =
+    EXPENSES.filter(
+      e => e.date === dateKey
+    );
+
+  return `
+
+    <div class="panel">
+
+      <div class="panel-title">
+
+        <div>
+          <h2>
+            ${escapeHtml(
+              fmtDate(dateKey)
+            )}
+          </h2>
+
+          <div class="muted">
+            Detail pracovního dne
+          </div>
+        </div>
+
+      </div>
+
+      <div class="panel">
+
+        <div class="panel-title">
+
+          <h3>🚆 Jízdenky</h3>
+
+          <button
+            class="btn btn-primary"
+            onclick="showAddTrainOptions()"
+          >
+            ＋ Přidat vlak
+          </button>
+
+        </div>
+
+        <div
+          id="addTrainOptions"
+          class="add-train-box"
+          style="display:none"
+        >
+
+          <div class="muted">
+            Vyber předvolbu vlaku:
+          </div>
+
+          <div class="train-options">
+
+            <button
+              class="train-option"
+              onclick="addPresetTrain('morningEN')"
+            >
+              <strong>🌅 Ranní EN</strong>
+              <span>
+                Bohumín → Praha
+              </span>
+            </button>
+
+            <button
+              class="train-option"
+              onclick="addPresetTrain('morningPendolino')"
+            >
+              <strong>🚄 Ranní Pendolino</strong>
+              <span>
+                Bohumín → Praha
+              </span>
+            </button>
+
+            <button
+              class="train-option"
+              onclick="addPresetTrain('afternoonEx')"
+            >
+              <strong>🚆 Odpolední Ex</strong>
+              <span>
+                Praha → Bohumín
+              </span>
+            </button>
+
+            <button
+              class="train-option"
+              onclick="addPresetTrain('eveningPendolino')"
+            >
+              <strong>🌙 Večerní Pendolino</strong>
+              <span>
+                Praha → Bohumín
+              </span>
+            </button>
+
+          </div>
+
+        </div>
+
+        ${
+          tickets.length
+
+          ? `
+            <div class="ticket-list">
+
+              ${tickets
+                .map(renderTicket)
+                .join("")}
+
+            </div>
+          `
+
+          : `
+            <div class="muted">
+              Pro tento den zatím není žádný vlak.
+            </div>
+          `
+        }
+
+      </div>
+
+      <div class="panel">
+
+        <div class="panel-title">
+
+          <h3>💳 Výdaje dne</h3>
+
+          <button
+            class="btn btn-small"
+            onclick="openExpenseModal('${dateKey}')"
+          >
+            ＋ Přidat výdaj
+          </button>
+
+        </div>
+
+        ${
+          expenses.length
+
+          ? expenses.map(e => `
+
+              <div class="expense">
+
+                <div>
+                  ${escapeHtml(e.description || "Výdaj")}
+                </div>
+
+                <strong>
+                  ${money(e.amount)}
+                </strong>
+
+              </div>
+
+          `).join("")
+
+          : `
+            <div class="muted">
+              Žádné samostatné výdaje.
+            </div>
+          `
+        }
+
+      </div>
+
+      <div class="kpis">
+
+        <div class="kpi">
+          <div class="value">
+            ${validTicketsForDate(dateKey).length}
+          </div>
+          <div class="label">
+            platné jízdenky
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="value">
+            ${money(trainCostForDate(dateKey))}
+          </div>
+          <div class="label">
+            vlaky
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="value">
+            ${money(expenseCostForDate(dateKey))}
+          </div>
+          <div class="label">
+            ostatní výdaje
+          </div>
+        </div>
+
+        <div class="kpi">
+          <div class="value">
+            ${money(totalCostForDate(dateKey))}
+          </div>
+          <div class="label">
+            celkem
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+/* =========================================================
+   DNEŠNÍ VIEW
+========================================================= */
+
+function renderToday(){
+
+  const key =
+    selectedDate || todayKey();
+
+  const tickets =
+    validTicketsForDate(key);
+
+  const cancelled =
+    ticketsForDate(key)
+      .filter(isTicketCancelled);
+
+  const html =
+    renderDayDetail(key);
+
+  return `
+
+    ${html}
+
+  `;
+
+}
+
+/* =========================================================
+   TÝDEN
+========================================================= */
+
+function getMonday(date){
+
+  const d = new Date(date);
+
+  const day = d.getDay();
+
+  const diff =
+    day === 0
+      ? -6
+      : 1 - day;
+
+  d.setDate(
+    d.getDate() + diff
+  );
+
+  return d;
+
+}
+
+function renderWeek(){
+
+  const monday =
+    getMonday(
+      dateObj(selectedDate)
+    );
+
+  let html = `
+
+    <div class="panel">
+
+      <div class="panel-title">
+
+        <h2>Týden</h2>
+
+        <button
+          class="btn btn-primary"
+          onclick="openDayDetail('${todayKey()}')"
+        >
+          Dnes
+        </button>
+
+      </div>
+
+      <div class="week-grid">
+
+  `;
+
+  const names =
+    [
+      "Po",
+      "Út",
+      "St",
+      "Čt",
+      "Pá",
+      "So",
+      "Ne"
+    ];
+
+  for(let i=0;i<7;i++){
+
+    const d =
+      new Date(monday);
+
+    d.setDate(
+      monday.getDate() + i
+    );
+
+    const key =
+      `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+
+    const tickets =
+      ticketsForDate(key);
+
+    const isToday =
+      key === todayKey();
+
+    html += `
+
+      <div
+        class="week-day ${isToday ? "today" : ""}"
+        onclick="openDayDetail('${key}')"
+      >
+
+        <div class="week-day-name">
+          ${names[i]}
+        </div>
+
+        <div class="week-day-number">
+          ${d.getDate()}
+        </div>
+
+        ${
+          tickets.length
+
+          ? tickets.map(t => `
+
+              <div
+                class="mini-ticket ${
+                  isTicketCancelled(t)
+                    ? "cancelled"
+                    : ""
+                }"
+              >
+                ${escapeHtml(t.train)}
+                ·
+                ${escapeHtml(t.dep)}
+              </div>
+
+          `).join("")
+
+          : `
+            <div class="muted">
+              —
+            </div>
+          `
+        }
+
+      </div>
+
+    `;
+
+  }
+
+  html += `
+
+      </div>
+
+    </div>
+
+  `;
+
+  return html;
+
+}
+
+/* =========================================================
+   MĚSÍC
+========================================================= */
+
+function renderMonth(){
+
+  const year =
+    calendarDate.getFullYear();
+
+  const month =
+    calendarDate.getMonth();
+
+  const monthName =
+    calendarDate.toLocaleDateString(
+      "cs-CZ",
+      {
+        month:"long",
+        year:"numeric"
+      }
+    );
+
+  let html = `
+
+    <div class="panel">
+
+      <div class="calendar-header">
+
+        <button onclick="changeMonth(-1)">
+          ‹
+        </button>
+
+        <div class="calendar-title">
+          ${monthName}
+        </div>
+
+        <button onclick="changeMonth(1)">
+          ›
+        </button>
+
+      </div>
+
+      <div class="calendar-grid">
+
+        <div class="calendar-weekday">Po</div>
+        <div class="calendar-weekday">Út</div>
+        <div class="calendar-weekday">St</div>
+        <div class="calendar-weekday">Čt</div>
+        <div class="calendar-weekday">Pá</div>
+        <div class="calendar-weekday">So</div>
+        <div class="calendar-weekday">Ne</div>
+
+  `;
+
+  let firstDay =
+    new Date(
+      year,
+      month,
+      1
+    ).getDay();
+
+  firstDay =
+    firstDay === 0
+      ? 6
+      : firstDay - 1;
+
+  for(let i=0;i<firstDay;i++){
+
+    html += `
+      <div class="calendar-day empty"></div>
+    `;
+
+  }
+
+  const days =
+    daysInMonth(
+      year,
+      month
+    );
+
+  for(let day=1;day<=days;day++){
+
+    const key =
+      keyFromDate(
+        year,
+        month,
+        day
+      );
+
+    const tickets =
+      ticketsForDate(key);
+
+    const isToday =
+      key === todayKey();
+
+    html += `
+
+      <div
+        class="calendar-day ${
+          isToday ? "today" : ""
+        }"
+        onclick="openDayDetail('${key}')"
+      >
+
+        <div class="calendar-number">
+          ${day}
+        </div>
+
+        ${
+          tickets.map(t => `
+
+            <div
+              class="calendar-ticket ${
+                isTicketCancelled(t)
+                  ? "cancelled"
+                  : getTicketStatus(t)
+              }"
+            >
+
+              ${
+                isTicketCancelled(t)
+                  ? "× "
+                  : ""
+              }
+
+              ${escapeHtml(t.train)}
+              ${t.dep ? " · " + escapeHtml(t.dep) : ""}
+
+            </div>
+
+          `).join("")
+        }
+
+      </div>
+
+    `;
+
+  }
+
+  html += `
+
+      </div>
+
+    </div>
+
+  `;
+
+  return html;
+
+}
+
+function changeMonth(delta){
+
+  calendarDate.setMonth(
+    calendarDate.getMonth() + delta
+  );
+
+  currentView = "month";
+
+  renderAll();
+
+}
+
+/* =========================================================
+   STATISTIKY
+========================================================= */
+
+function getMonthKey(date = new Date()){
+
+  return `${date.getFullYear()}-${pad(date.getMonth()+1)}`;
+
+}
+
+function getMonthStats(){
+
+  const monthKey =
+    getMonthKey();
+
+  const monthTickets =
+    TICKETS.filter(
+      t => t.date.startsWith(monthKey)
+    );
+
+  const valid =
+    monthTickets.filter(
+      isTicketValid
+    );
+
+  const cancelled =
+    monthTickets.filter(
+      isTicketCancelled
+    );
+
+  const trainCost =
+    valid.reduce(
+      (sum,t) =>
+        sum + Number(t.price || 0),
+      0
+    );
+
+  const expenses =
+    EXPENSES.filter(
+      e => e.date.startsWith(monthKey)
+    );
+
+  const expenseCost =
+    expenses.reduce(
+      (sum,e) =>
+        sum + Number(e.amount || 0),
+      0
+    );
+
+  const officeDays =
+    new Set(
+      valid.map(t => t.date)
+    ).size;
+
+  return {
+
+    monthKey,
+
+    tickets:monthTickets,
+
+    valid,
+
+    cancelled,
+
+    trainCost,
+
+    expenses,
+
+    expenseCost,
+
+    totalCost:
+      trainCost + expenseCost,
+
+    officeDays
+
+  };
+
+}
+
+function getAttendance(){
+
+  const now =
+    new Date();
+
+  const year =
+    now.getFullYear();
+
+  const month =
+    now.getMonth();
+
+  const today =
+    now.getDate();
+
+  let workdays = 0;
+
+  for(let day=1;day<=today;day++){
+
+    const d =
+      new Date(
+        year,
+        month,
+        day
+      );
+
+    const weekday =
+      d.getDay();
+
+    if(
+      weekday !== 0 &&
+      weekday !== 6
+    ){
+
+      workdays++;
+
+    }
+
+  }
+
+  const monthKey =
+    getMonthKey(now);
+
+  const officeDays =
+    new Set(
+
+      TICKETS
+        .filter(
+          t =>
+            t.date.startsWith(monthKey) &&
+            isTicketValid(t)
+        )
+        .map(t => t.date)
+
+    ).size;
+
+  const percentage =
+    workdays
+      ? officeDays / workdays * 100
+      : 0;
+
+  return {
+
+    workdays,
+
+    officeDays,
+
+    percentage,
+
+    target:20
+
+  };
+
+}
+
+function renderStats(){
+
+  const s =
+    getMonthStats();
+
+  const attendance =
+    getAttendance();
+
+  const attendanceWidth =
+    Math.min(
+      100,
+      attendance.percentage
+    );
+
+  return `
+
+    <div class="panel">
+
+      <div class="panel-title">
+
+        <div>
+          <h2>📊 Statistiky</h2>
+
+          <div class="muted">
+            ${s.monthKey}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+
+          <div class="big">
+            ${s.officeDays}
+          </div>
+
+          <div class="small">
+            dny v kanceláři
+          </div>
+
+        </div>
+
+        <div class="stat-card">
+
+          <div class="big">
+            ${s.valid.length}
+          </div>
+
+          <div class="small">
+            platné jízdenky
+          </div>
+
+        </div>
+
+        <div class="stat-card">
+
+          <div class="big">
+            ${s.cancelled.length}
+          </div>
+
+          <div class="small">
+            stornované jízdenky
+          </div>
+
+        </div>
+
+        <div class="stat-card">
+
+          <div class="big">
+            ${money(s.trainCost)}
+          </div>
+
+          <div class="small">
+            vlaky
+          </div>
+
+        </div>
+
+        <div class="stat-card">
+
+          <div class="big">
+            ${money(s.expenseCost)}
+          </div>
+
+          <div class="small">
+            ostatní výdaje
+          </div>
+
+        </div>
+
+        <div class="stat-card">
+
+          <div class="big">
+            ${money(s.totalCost)}
+          </div>
+
+          <div class="small">
+            celkem
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="panel">
+
+      <div class="panel-title">
+
+        <div>
+
+          <h3>🏢 Docházka</h3>
+
+          <div class="muted">
+            Cíl: 20 % práce z kanceláře
+          </div>
+
+        </div>
+
+      </div>
+
+      <div style="font-size:28px;font-weight:bold">
+
+        ${attendance.percentage.toFixed(1)} %
+
+      </div>
+
+      <div class="muted">
+
+        ${attendance.officeDays}
+        kancelářských dnů /
+        ${attendance.workdays}
+        pracovních dnů
+
+      </div>
+
+      <div class="progress">
+
+        <div
+          style="width:${attendanceWidth}%"
+        ></div>
+
+      </div>
+
+    </div>
+
+    <div class="panel">
+
+      <div class="panel-title">
+
+        <h3>🚇 MHD + Praha</h3>
+
+      </div>
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+
+          <div class="big">
+            ${money(
+              LITACKA_PAYMENTS.reduce(
+                (s,p) =>
+                  s + Number(p.amount || 0),
+                0
+              )
+            )}
+          </div>
+
+          <div class="small">
+            Lítačka
+          </div>
+
+        </div>
+
+        <div class="stat-card">
+
+          <div class="big">
+            ${money(
+              KARVINA_PAYMENTS.reduce(
+                (s,p) =>
+                  s + Number(p.amount || 0),
+                0
+              )
+            )}
+          </div>
+
+          <div class="small">
+            MHD Karviná
+          </div>
+
+        </div>
+
+      </div>
+
+      <p class="muted">
+        Data pro Lítačku a ČSAD Karviná jsou připravena
+        pro následný import.
+      </p>
+
+    </div>
+
+    <div class="panel">
+
+      <div class="panel-title">
+
+        <h3>🏒 Sport</h3>
+
+      </div>
+
+      ${
+        NHL_GAMES.length
+
+        ? NHL_GAMES.map(game => `
+
+            <div class="expense">
+
+              <div>
+                ${escapeHtml(game.team1 || "")}
+                –
+                ${escapeHtml(game.team2 || "")}
+              </div>
+
+              <div class="muted">
+                ${escapeHtml(game.date || "")}
+              </div>
+
+            </div>
+
+        `).join("")
+
+        : `
+          <div class="muted">
+            NHL zápasy budou doplněny.
+          </div>
+        `
+      }
+
+    </div>
+
+  `;
+
+}
+
+/* =========================================================
+   VÝDAJE
+========================================================= */
+
+function openExpenseModal(dateKey){
+
+  document.getElementById(
+    "expenseDate"
+  ).value = dateKey;
+
+  document.getElementById(
+    "expenseAmount"
+  ).value = "";
+
+  document.getElementById(
+    "expenseDescription"
+  ).value = "";
+
+  document
+    .getElementById("expenseModal")
+    .classList.add("show");
+
+}
+
+function closeExpenseModal(){
+
+  document
+    .getElementById("expenseModal")
+    .classList.remove("show");
+
+}
+
+function saveExpenseFromForm(event){
+
+  event.preventDefault();
+
+  EXPENSES.push({
+
+    id:uid("expense"),
+
+    date:
+      document.getElementById(
+        "expenseDate"
+      ).value,
+
+    amount:
+      Number(
+        document.getElementById(
+          "expenseAmount"
+        ).value || 0
+      ),
+
+    description:
+      document.getElementById(
+        "expenseDescription"
+      ).value.trim()
+
+  });
+
+  saveStoredData();
+
+  closeExpenseModal();
+
+  renderAll();
+
+}
+
+/* =========================================================
+   EXPORT
+========================================================= */
+
+function exportData(){
+
+  const data = {
+
+    version:3,
+
+    exportedAt:
+      new Date().toISOString(),
+
+    tickets:TICKETS,
+
+    ticketStatusOverrides:
+      TICKET_STATUS_OVERRIDES,
+
+    expenses:EXPENSES,
+
+    litackaPayments:
+      LITACKA_PAYMENTS,
+
+    karvinaPayments:
+      KARVINA_PAYMENTS,
+
+    nhlGames:NHL_GAMES
+
+  };
+
+  const blob =
+    new Blob(
+      [
+        JSON.stringify(
+          data,
+          null,
+          2
+        )
+      ],
+      {
+        type:"application/json"
+      }
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+
+  a.download =
+    "muj-pracovni-den-data.json";
+
+  a.click();
+
+  URL.revokeObjectURL(url);
+
+}
+
+/* =========================================================
+   IMPORT
+========================================================= */
+
+function importData(event){
+
+  const file =
+    event.target.files[0];
+
+  if(!file) return;
+
+  const reader =
+    new FileReader();
+
+  reader.onload = function(){
+
+    try{
+
+      const data =
+        JSON.parse(
+          reader.result
+        );
+
+      if(
+        !confirm(
+          "Import nahradí současná uložená data. Pokračovat?"
+        )
+      ){
+
+        return;
+
+      }
+
+      if(Array.isArray(data.tickets)){
+
+        TICKETS =
+          data.tickets;
+
+      }
+
+      TICKET_STATUS_OVERRIDES =
+        data.ticketStatusOverrides || {};
+
+      EXPENSES =
+        Array.isArray(data.expenses)
+          ? data.expenses
+          : [];
+
+      LITACKA_PAYMENTS =
+        Array.isArray(
+          data.litackaPayments
+        )
+          ? data.litackaPayments
+          : [];
+
+      KARVINA_PAYMENTS =
+        Array.isArray(
+          data.karvinaPayments
+        )
+          ? data.karvinaPayments
+          : [];
+
+      NHL_GAMES =
+        Array.isArray(
+          data.nhlGames
+        )
+          ? data.nhlGames
+          : [];
+
+      saveStoredData();
+
+      renderAll();
+
+      alert("Data byla importována.");
+
+    }catch(error){
+
+      alert(
+        "Soubor se nepodařilo načíst."
+      );
+
+      console.error(error);
+
+    }
+
+  };
+
+  reader.readAsText(file);
+
+  event.target.value = "";
+
+}
+
+/* =========================================================
+   START
+========================================================= */
+
+loadStoredData();
+
+selectedDate = todayKey();
+
+calendarDate =
+  new Date();
+
+setView("today");
+
+</script>
+
+</body>
+</html>
